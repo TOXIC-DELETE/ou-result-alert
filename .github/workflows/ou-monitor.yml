@@ -1,9 +1,9 @@
 name: OU Result Monitor
 
 on:
-  schedule:
-    - cron: "*/5 * * * *"
-  workflow_dispatch:
+  repository_dispatch:
+    types:  [ou_check]
+  workflow_dispatch: 
 
 jobs:
   check-result:
