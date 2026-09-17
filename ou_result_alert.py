@@ -18,7 +18,7 @@ OU_URL = "https://www.osmania.ac.in/examination-results.php"
 
 # IMPORTANT:
 # Put your BotFather token between the quotes.
-BOT_TOKEN = "8824070936:AAF8u3-TmUZuUyluV5MqBAalZiuD8-g9yN4"
+BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN")
 
 CHAT_ID = "1807465704"
 
