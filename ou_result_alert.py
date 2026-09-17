@@ -213,98 +213,68 @@ print()
 # MAIN MONITOR
 # ==============================
 
-while True:
+# ==============================
+# RUN ONE CHECK
+# ==============================
 
-    result = check_ou_results()
+result = check_ou_results()
 
+if result:
 
-    # --------------------------------
-    # RESULT FOUND
-    # --------------------------------
+    print()
+    print("==========================================")
+    print("🎉 RESULT FOUND!")
+    print("==========================================")
 
-    if result:
+    print("Result:")
+    print(result["name"])
+
+    print()
+    print("Link:")
+    print(result["url"])
+
+    if already_notified(result):
 
         print()
-        print("==========================================")
-        print("🎉 RESULT FOUND!")
-        print("==========================================")
-
-        print("Result:")
-        print(result["name"])
-
-        print()
-
-        print("Link:")
-        print(result["url"])
-
-
-        # Check whether we already notified
-        if already_notified(result):
-
-            print()
-            print("ℹ️ This result was already notified.")
-            print("Monitor will continue checking.")
-
-        else:
-
-            # Create Telegram message
-            message = (
-                "🎓 OU RESULT ALERT!\n\n"
-                "🎉 Your result appears to be released!\n\n"
-                f"{result['name']}\n\n"
-            )
-
-
-            if result["url"]:
-
-                message += (
-                    "🔗 Official OU Result:\n"
-                    f"{result['url']}"
-                )
-
-            else:
-
-                message += (
-                    "Please check the official OU "
-                    "results page:\n"
-                    f"{OU_URL}"
-                )
-
-
-            # Send Telegram
-            sent = send_telegram(message)
-
-
-            # Save only if Telegram succeeded
-            if sent:
-
-                save_notification(result)
-
-                print()
-                print("✅ Notification recorded.")
-                print("🛑 Monitor stopped.")
-
-                break
-
-
-    # --------------------------------
-    # RESULT NOT FOUND
-    # --------------------------------
+        print("ℹ️ This result was already notified.")
+        print("No Telegram message sent.")
 
     else:
 
-        print()
-        print("❌ VI SEM REGULAR result not found yet.")
-
-        print(
-            "Waiting for: "
-            "BE AICTE + VI SEM + REGULAR"
+        message = (
+            "🎓 OU RESULT ALERT!\n\n"
+            "🎉 Your result appears to be released!\n\n"
+            f"{result['name']}\n\n"
         )
 
-        print()
-        print("⏳ Next check in 5 minutes...")
+        if result["url"]:
 
+            message += (
+                "🔗 Official OU Result:\n"
+                f"{result['url']}"
+            )
 
-        time.sleep(
-            CHECK_INTERVAL
-        )
+        else:
+
+            message += (
+                "Please check the official OU results page:\n"
+                f"{OU_URL}"
+            )
+
+        sent = send_telegram(message)
+
+        if sent:
+
+            save_notification(result)
+
+            print()
+            print("✅ Telegram notification sent and recorded.")
+
+else:
+
+    print()
+    print("❌ VI SEM REGULAR result not found yet.")
+    print("Waiting for BE AICTE + VI SEM + REGULAR.")
+
+print()
+print("✅ Check finished.")
